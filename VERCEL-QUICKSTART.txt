@@ -1,0 +1,254 @@
+================================================================================
+FGU CHARACTER SHEET GENERATOR V2 - QUICK START GUIDE
+================================================================================
+
+Welcome to the Web Version! This is a cloud-deployable version of the FGU
+character sheet generator that runs on any web server.
+
+================================================================================
+WHAT'S NEW IN V2?
+================================================================================
+
+✓ No desktop installation needed
+✓ Access from any device with a browser
+✓ No Python installation required for users
+✓ Cloud deployment (Vercel, Heroku, etc.)
+✓ Same beautiful character sheets
+✓ Modern web interface with drag & drop
+✓ Mobile-friendly design
+
+================================================================================
+DEPLOYMENT (Choose One)
+================================================================================
+
+OPTION 1: DEPLOY ON VERCEL (RECOMMENDED - FREE & EASIEST)
+────────────────────────────────────────────────────────
+
+1. Sign up at https://vercel.com (free account, no credit card needed)
+
+2. Push code to GitHub:
+   - Create repository on GitHub
+   - Push all files from this folder
+   - Include: proyectocsFGU_V2.py, requirements.txt, vercel.json
+
+3. Deploy from Vercel:
+   - Connect GitHub account to Vercel
+   - Select the repository
+   - Click "Deploy"
+   - Wait 1-2 minutes
+   - Your site is live!
+
+   Your URL will be: https://your-project-name.vercel.app
+
+OPTION 2: RUN LOCALLY FOR TESTING
+──────────────────────────────────
+
+1. Install Python (if not already installed)
+   Download from https://www.python.org/downloads/
+
+2. Install dependencies:
+   Open PowerShell/Terminal in this folder and run:
+   
+   pip install -r requirements.txt
+
+3. Run the application:
+   
+   python proyectocsFGU_V2.py
+
+4. Open browser:
+   http://localhost:5000
+
+OPTION 3: DEPLOY ON HEROKU (FREE TIER ENDING)
+───────────────────────────────────────────
+
+1. Install Heroku CLI:
+   https://devcenter.heroku.com/articles/heroku-cli
+
+2. Create Procfile (add to folder):
+   web: gunicorn proyectocsFGU_V2:app
+
+3. Deploy:
+   heroku login
+   heroku create your-app-name
+   git push heroku main
+
+================================================================================
+FILES INCLUDED
+================================================================================
+
+proyectocsFGU_V2.py
+  - Main Flask web application
+  - Complete XML parsing and HTML generation
+  - Web interface with upload form
+
+requirements.txt
+  - Python dependencies (flask, werkzeug)
+  - Install with: pip install -r requirements.txt
+
+vercel.json
+  - Vercel deployment configuration
+  - Auto-detected for Vercel deployment
+
+README_V2.md
+  - Detailed documentation
+  - Troubleshooting guide
+  - Feature descriptions
+
+VERCEL-QUICKSTART.txt (this file)
+  - Quick deployment guide
+
+================================================================================
+USAGE (After Deployment)
+================================================================================
+
+1. Open the deployed web app in your browser
+
+2. Upload FGU Character XML:
+   - Click "Click to upload or drag & drop"
+   - Select XML file exported from Fantasy Grounds Unity
+   - Or drag XML file onto the box
+
+3. Click "Generate Character Sheet"
+
+4. Download the HTML file
+
+5. Open HTML in your browser to view the character sheet
+
+6. Print to PDF or paper as needed
+
+================================================================================
+TESTING BEFORE DEPLOYMENT
+================================================================================
+
+Test locally first:
+
+1. pip install -r requirements.txt
+
+2. python proyectocsFGU_V2.py
+
+3. Open http://localhost:5000
+
+4. Upload a test XML file
+
+5. Verify HTML generates correctly
+
+6. Check on mobile browser (responsive design test)
+
+Once working locally, deploy to Vercel!
+
+================================================================================
+VERCEL DEPLOYMENT CHECKLIST
+================================================================================
+
+Before deploying, ensure you have:
+
+☐ GitHub account (free at github.com)
+☐ Vercel account (free at vercel.com)
+☐ These files in your repository:
+  ☐ proyectocsFGU_V2.py
+  ☐ requirements.txt
+  ☐ vercel.json
+☐ Files pushed to GitHub
+
+Deployment steps:
+☐ Go to vercel.com/dashboard
+☐ Click "New Project"
+☐ Import your GitHub repository
+☐ Vercel auto-detects Python
+☐ Click "Deploy"
+☐ Wait for build to complete
+☐ Click "Visit" to see your live app
+
+That's it! Your app is now live on the internet!
+
+================================================================================
+ENVIRONMENT VARIABLES (Optional)
+================================================================================
+
+For advanced deployment, you can add environment variables in Vercel:
+
+MAX_UPLOAD_SIZE: Maximum file size in MB (default: 16)
+DEBUG: Set to false for production
+
+Set in Vercel Project Settings > Environment Variables
+
+================================================================================
+COSTS
+================================================================================
+
+VERCEL:
+- Free tier: Up to 100 GB bandwidth/month
+- Free tier: Unlimited requests
+- No credit card needed
+
+HEROKU:
+- Free tier has ended (was previously free)
+- Paid plans start at $7/month
+
+GITHUB:
+- Free forever for public/private repos
+
+Total cost for your own deployed app: $0
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+VERCEL DEPLOYMENT FAILS:
+- Check all files are committed to GitHub
+- Ensure requirements.txt exists and lists dependencies
+- Check vercel.json configuration
+- View build logs in Vercel dashboard
+
+APP SHOWS ERROR ON UPLOAD:
+- File must be .xml format
+- File must be valid FGU character export
+- Try with test character file
+- Check browser console for error details (F12)
+
+GENERATED HTML LOOKS WRONG:
+- Clear browser cache (Ctrl+Shift+Delete)
+- Try different browser
+- Verify original XML is valid
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Choose deployment option (Vercel recommended)
+
+2. Test locally:
+   pip install -r requirements.txt
+   python proyectocsFGU_V2.py
+
+3. Push to GitHub
+
+4. Deploy on Vercel
+
+5. Share the link with friends!
+
+================================================================================
+SHARING WITH FRIENDS
+================================================================================
+
+Once deployed, just share the Vercel URL:
+https://your-app-name.vercel.app
+
+Your friends can:
+- Open the URL in any browser
+- Upload their FGU character XML
+- Download the HTML character sheet
+
+No installation required on their end!
+
+================================================================================
+SUPPORT & RESOURCES
+================================================================================
+
+Vercel Docs: https://vercel.com/docs
+Flask Docs: https://flask.palletsprojects.com
+GitHub Docs: https://docs.github.com
+
+================================================================================
+Questions? Check README_V2.md for detailed documentation.
+================================================================================

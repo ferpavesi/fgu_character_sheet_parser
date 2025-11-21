@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "proyectocsFGU_V2.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "proyectocsFGU_V2.py"
+    }
+  ]
+}

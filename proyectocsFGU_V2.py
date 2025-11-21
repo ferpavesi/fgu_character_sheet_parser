@@ -581,6 +581,19 @@ def parse_fgu_character_to_html(xml_content):
             font-size: 1.3em;
             font-weight: bold;
             color: #8b6914;
+            margin-top: 8px;
+        }}
+        
+        .coin-item input[type="text"] {{
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #8b6914;
+            border-radius: 3px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #8b6914;
+            margin-top: 8px;
         }}
         
         .spell-level-toggle {{
@@ -861,7 +874,7 @@ def parse_fgu_character_to_html(xml_content):
             coin_value = coins.get(coin_type, "0")
             html += f"""                    <div class="coin-item">
                         <strong>{coin_type}</strong>
-                        <div class="amount">{escape_html(coin_value)}</div>
+                        <input type="text" value="{escape_html(coin_value)}" />
                     </div>
 """
         
@@ -1240,12 +1253,11 @@ def generate():
                 if name_elem is not None and name_elem.text:
                     char_name = name_elem.text.strip()
                     if char_name:
-                        # Clean filename - remove invalid characters, keep spaces and dashes
-                        clean_name = "".join(c if c.isalnum() or c in (' ', '_', '-') else '' for c in char_name).strip()
+                        # Clean filename - remove invalid characters
+                        clean_name = "".join(c for c in char_name if c.isalnum() or c in (' ', '_', '-')).strip()
                         if clean_name:
-                            filename = f"character_sheet_{clean_name}.html"
-        except Exception as parse_error:
-            # If extraction fails, use default filename
+                            filename = f"{clean_name}.html"
+        except:
             pass
         
         # Return HTML as downloadable file

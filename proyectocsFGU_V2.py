@@ -19,6 +19,7 @@ from io import BytesIO
 from flask import Flask, render_template_string, request, send_file, jsonify
 from werkzeug.utils import secure_filename
 
+# Create Flask app - must be at module level for Vercel
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file
 app.config['UPLOAD_FOLDER'] = '/tmp'
@@ -1248,9 +1249,7 @@ def health():
 
 
 # Vercel requires this for deployment
-def handler(request):
-    """WSGI handler for Vercel."""
-    return app(request)
+app.wsgi_app = app.wsgi_app
 
 
 if __name__ == '__main__':

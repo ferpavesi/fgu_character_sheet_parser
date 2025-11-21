@@ -1231,17 +1231,22 @@ def generate():
             return jsonify({'error': error}), 400
         
         # Extract character name for filename
+        filename = "character_sheet.html"
         try:
             root = ET.fromstring(xml_content)
             char = root.find("character")
-            char_name = safe_get_text(char, "name") if char else "character"
-            # Clean filename - remove invalid characters
-            clean_name = "".join(c for c in char_name if c.isalnum() or c in (' ', '_', '-')).strip()
-            if not clean_name:
-                clean_name = "character"
-            filename = f"{clean_name}.html"
-        except:
-            filename = "character_sheet.html"
+            if char is not None:
+                name_elem = char.find("name")
+                if name_elem is not None and name_elem.text:
+                    char_name = name_elem.text.strip()
+                    if char_name:
+                        # Clean filename - remove invalid characters, keep spaces and dashes
+                        clean_name = "".join(c if c.isalnum() or c in (' ', '_', '-') else '' for c in char_name).strip()
+                        if clean_name:
+                            filename = f"character_sheet_{clean_name}.html"
+        except Exception as parse_error:
+            # If extraction fails, use default filename
+            pass
         
         # Return HTML as downloadable file
         return send_file(

@@ -991,47 +991,24 @@ def parse_fgu_character_to_html(xml_content):
         if spell_slots:
             html += """            <div class="section">
                 <h2>Spell Slots</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
 """
             spell_levels = sorted(spell_slots.keys(), key=int)
-            mid_point = (len(spell_levels) + 1) // 2
             
-            html += """                    <div>
-"""
-            for level in spell_levels[:mid_point]:
+            for level in spell_levels:
                 max_slots = int(spell_slots[level]["max"])
                 used_slots = int(spell_slots[level].get("used", "0"))
-                html += f"""                        <div class="spell-slot-level">
-                            <strong>Level {level}:</strong>
-                            <div class="spell-slot-bubbles">
+                html += f"""                <div class="spell-slot-level">
+                    <strong>Level {level}:</strong>
+                    <div class="spell-slot-bubbles">
 """
                 for i in range(max_slots):
                     is_checked = i < used_slots
-                    html += f"""                                <input type="checkbox" {'checked' if is_checked else ''}>
+                    html += f"""                        <input type="checkbox" {'checked' if is_checked else ''}>
 """
-                html += """                            </div>
-                        </div>
-"""
-            html += """                    </div>
-                    <div>
-"""
-            for level in spell_levels[mid_point:]:
-                max_slots = int(spell_slots[level]["max"])
-                used_slots = int(spell_slots[level].get("used", "0"))
-                html += f"""                        <div class="spell-slot-level">
-                            <strong>Level {level}:</strong>
-                            <div class="spell-slot-bubbles">
-"""
-                for i in range(max_slots):
-                    is_checked = i < used_slots
-                    html += f"""                                <input type="checkbox" {'checked' if is_checked else ''}>
-"""
-                html += """                            </div>
-                        </div>
-"""
-            html += """                    </div>
+                html += """                    </div>
                 </div>
-            </div>
+"""
+            html += """            </div>
 """
         
         if spells:
@@ -1078,27 +1055,7 @@ def parse_fgu_character_to_html(xml_content):
                 html += """                </div>
 """
             
-            html += """                <script>
-                function toggleSpell(elem) {
-                    const content = elem.nextElementSibling;
-                    content.classList.toggle('active');
-                    const arrow = elem.querySelector('span');
-                    arrow.textContent = content.classList.contains('active') ? '▲' : '▼';
-                }
-                function expandAllSpells() {
-                    document.querySelectorAll('.spell-level-content').forEach(el => {
-                        el.classList.add('active');
-                        el.previousElementSibling.querySelector('span').textContent = '▲';
-                    });
-                }
-                function collapseAllSpells() {
-                    document.querySelectorAll('.spell-level-content').forEach(el => {
-                        el.classList.remove('active');
-                        el.previousElementSibling.querySelector('span').textContent = '▼';
-                    });
-                }
-                </script>
-            </div>
+            html += """            </div>
 """
         
         html += """        </div>
@@ -1468,6 +1425,39 @@ def index():
                 
                 // Scroll to top
                 window.scrollTo(0, 0);
+            }
+            
+            function toggleSpell(elem) {
+                const content = elem.nextElementSibling;
+                if (content && content.classList.contains('spell-level-content')) {
+                    content.classList.toggle('active');
+                    const arrow = elem.querySelector('span');
+                    if (arrow) {
+                        arrow.textContent = content.classList.contains('active') ? '▲' : '▼';
+                    }
+                }
+            }
+            
+            function expandAllSpells() {
+                document.querySelectorAll('.spell-level-content').forEach(el => {
+                    el.classList.add('active');
+                    const toggle = el.previousElementSibling;
+                    if (toggle) {
+                        const arrow = toggle.querySelector('span');
+                        if (arrow) arrow.textContent = '▲';
+                    }
+                });
+            }
+            
+            function collapseAllSpells() {
+                document.querySelectorAll('.spell-level-content').forEach(el => {
+                    el.classList.remove('active');
+                    const toggle = el.previousElementSibling;
+                    if (toggle) {
+                        const arrow = toggle.querySelector('span');
+                        if (arrow) arrow.textContent = '▼';
+                    }
+                });
             }
         </script>
     </body>

@@ -1012,18 +1012,17 @@ def parse_fgu_character_to_html(xml_content):
 """
         
         if sorcery_points:
+            max_points = int(sorcery_points['max'])
+            used_points = int(sorcery_points['used'])
             html += f"""            <div class="section">
                 <h2>Sorcery Points</h2>
-                <div style="text-align: center; padding: 15px;">
-                    <div style="margin-bottom: 12px;">
-                        <strong>Maximum:</strong>
-                        <div style="font-size: 1.8em; font-weight: bold; color: #8b6914; margin-top: 6px;">{escape_html(sorcery_points['max'])}</div>
-                    </div>
-                    <div>
-                        <strong>Used:</strong>
-                        <input type="text" value="{escape_html(sorcery_points['used'])}" style="width: 80px; padding: 6px; border: 1px solid #8b6914; border-radius: 3px; text-align: center; font-size: 1.1em; font-weight: bold; color: #8b6914; margin-top: 6px;">
-                    </div>
-                </div>
+                <div class="spell-slot-bubbles" style="padding: 10px;">
+"""
+            for i in range(max_points):
+                is_checked = i < used_points
+                html += f"""                    <input type="checkbox" {'checked' if is_checked else ''}>
+"""
+            html += """                </div>
             </div>
 """
         

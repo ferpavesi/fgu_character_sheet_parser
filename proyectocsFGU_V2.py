@@ -630,32 +630,48 @@ def parse_fgu_character_to_html(xml_content):
         
         @media (max-width: 900px) {{
             body {{
-                padding: 8px;
+                padding: 4px;
             }}
             
             .character-sheet {{
-                padding: 10px;
+                padding: 6px;
                 border: 2px solid #8b6914;
             }}
             
+            .header {{
+                padding-bottom: 10px;
+                margin-bottom: 12px;
+            }}
+            
             .header h1 {{
-                font-size: 1.3em;
-                margin-bottom: 8px;
+                font-size: 1.4em;
+                margin-bottom: 6px;
             }}
             
             .header-info {{
                 grid-template-columns: 1fr;
-                gap: 6px;
+                gap: 4px;
+                font-size: 0.9em;
             }}
             
             .page-layout {{
                 grid-template-columns: 1fr !important;
-                gap: 12px !important;
+                gap: 10px !important;
+                margin-bottom: 15px !important;
+            }}
+            
+            .sidebar {{
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
             }}
             
             .stat-box {{
-                padding: 2px 5px;
-                margin-bottom: 2px;
+                flex: 1;
+                min-width: 90px;
+                padding: 4px;
+                margin-bottom: 0;
             }}
             
             .section {{
@@ -663,50 +679,103 @@ def parse_fgu_character_to_html(xml_content):
             }}
             
             .section h2 {{
-                font-size: 1em;
-                margin-bottom: 8px;
+                font-size: 0.95em;
+                margin-bottom: 6px;
             }}
             
             .page {{
                 border: 2px solid #8b6914;
-                padding: 12px 8px;
-                margin: 15px 0;
+                padding: 10px;
+                margin: 12px 0;
+                border-radius: 8px;
             }}
         }}
         
         @media (max-width: 600px) {{
             html {{
-                font-size: 14px;
+                font-size: 12px;
             }}
             
             body {{
-                padding: 4px;
+                padding: 2px;
                 margin: 0;
             }}
             
             .character-sheet {{
-                padding: 6px;
+                padding: 4px;
                 border: 1px solid #8b6914;
+                margin: 0;
+            }}
+            
+            .header {{
+                padding-bottom: 8px;
+                margin-bottom: 10px;
             }}
             
             .header h1 {{
-                font-size: 1.1em;
+                font-size: 1em;
                 margin: 0;
+                padding-bottom: 6px;
+            }}
+            
+            .header-info {{
+                grid-template-columns: 1fr;
+                gap: 4px;
+                font-size: 0.85em;
             }}
             
             .page {{
                 border: 1px solid #8b6914;
-                padding: 8px;
-                margin: 10px 0;
+                padding: 6px;
+                margin: 8px 0;
+                border-radius: 4px;
+            }}
+            
+            .page-layout {{
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+                margin-bottom: 10px !important;
+            }}
+            
+            .sidebar {{
+                width: 100%;
+                gap: 3px;
+            }}
+            
+            .stat-box {{
+                padding: 2px 3px;
+                margin-bottom: 1px;
+                font-size: 0.8em;
+            }}
+            
+            .stat-box h3 {{
+                font-size: 0.6em;
+                margin-bottom: 1px;
+            }}
+            
+            .ability-score {{
+                font-size: 1em;
+                margin: 1px 0;
+            }}
+            
+            .section {{
+                padding: 4px;
+            }}
+            
+            .section h2 {{
+                font-size: 0.85em;
+                margin-bottom: 6px;
+                padding-bottom: 4px;
             }}
             
             .spell-level-toggle {{
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
+                padding: 8px;
             }}
             
             .spell-level-toggle h3 {{
-                font-size: 0.95em;
+                font-size: 0.85em;
             }}
             
             .spell-level-toggle span {{
@@ -714,17 +783,24 @@ def parse_fgu_character_to_html(xml_content):
             }}
             
             button {{
-                padding: 4px 8px !important;
-                font-size: 0.75em !important;
-            }}
-            
-            .section {{
-                padding: 6px;
+                padding: 3px 6px !important;
+                font-size: 0.7em !important;
             }}
             
             .coin-item input[type="text"] {{
-                width: 70px;
-                font-size: 0.95em;
+                width: 60px;
+                padding: 3px;
+                font-size: 0.85em;
+            }}
+            
+            .hp-details {{
+                flex-direction: column;
+                gap: 6px;
+            }}
+            
+            .skill-item {{
+                padding: 2px 0;
+                font-size: 0.8em;
             }}
         }}
     </style>

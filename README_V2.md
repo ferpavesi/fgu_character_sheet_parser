@@ -1,6 +1,6 @@
 # FGU Character Sheet Generator - Web Version (V2)
 
-Convert Fantasy Grounds Unity XML character files to beautiful, responsive HTML character sheets.
+Convert Fantasy Grounds Unity XML character files to beautiful, responsive HTML character sheets..
 
 ## Features
 
@@ -140,3 +140,4 @@ This tool is provided as-is for personal use with Fantasy Grounds Unity.
 ## Support
 
 For issues or questions, check the character sheet output for error messages or review the uploaded XML file format.
+

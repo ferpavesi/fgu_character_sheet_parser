@@ -699,6 +699,33 @@ def parse_fgu_character_to_html(xml_content):
                 padding: 8px;
                 margin: 10px 0;
             }}
+            
+            .spell-level-toggle {{
+                flex-direction: column;
+                gap: 8px;
+            }}
+            
+            .spell-level-toggle h3 {{
+                font-size: 0.95em;
+            }}
+            
+            .spell-level-toggle span {{
+                align-self: flex-start;
+            }}
+            
+            button {{
+                padding: 4px 8px !important;
+                font-size: 0.75em !important;
+            }}
+            
+            .section {{
+                padding: 6px;
+            }}
+            
+            .coin-item input[type="text"] {{
+                width: 70px;
+                font-size: 0.95em;
+            }}
         }}
     </style>
 </head>
@@ -933,7 +960,13 @@ def parse_fgu_character_to_html(xml_content):
         
         if spells:
             html += """            <div class="section">
-                <h2>Spells</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2 style="margin: 0;">Spells</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="expandAllSpells()" style="background: #8b6914; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 0.85em;">Expand All</button>
+                        <button onclick="collapseAllSpells()" style="background: #8b6914; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 0.85em;">Collapse All</button>
+                    </div>
+                </div>
 """
             
             spells_by_level = {}
@@ -973,6 +1006,20 @@ def parse_fgu_character_to_html(xml_content):
                 function toggleSpell(elem) {
                     const content = elem.nextElementSibling;
                     content.classList.toggle('active');
+                    const arrow = elem.querySelector('span');
+                    arrow.textContent = content.classList.contains('active') ? '▲' : '▼';
+                }
+                function expandAllSpells() {
+                    document.querySelectorAll('.spell-level-content').forEach(el => {
+                        el.classList.add('active');
+                        el.previousElementSibling.querySelector('span').textContent = '▲';
+                    });
+                }
+                function collapseAllSpells() {
+                    document.querySelectorAll('.spell-level-content').forEach(el => {
+                        el.classList.remove('active');
+                        el.previousElementSibling.querySelector('span').textContent = '▼';
+                    });
                 }
                 </script>
             </div>

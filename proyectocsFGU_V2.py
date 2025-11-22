@@ -1057,10 +1057,16 @@ def index():
                 font-family: 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
                 background: linear-gradient(135deg, #f5f1e8 0%, #e8ddd4 100%);
                 min-height: 100vh;
+                padding: 20px;
+            }
+            .upload-section {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 20px;
+                min-height: 100vh;
+            }
+            .upload-section.hidden {
+                display: none;
             }
             .container {
                 background: white;
@@ -1150,6 +1156,63 @@ def index():
                 margin-bottom: 20px;
                 display: none;
             }
+            
+            .sheet-section {
+                display: none;
+            }
+            .sheet-section.active {
+                display: block;
+            }
+            
+            .sheet-header {
+                background: white;
+                border: 3px solid #8b6914;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            
+            .sheet-header-buttons {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            
+            .sheet-header button {
+                padding: 8px 16px;
+                font-size: 0.9em;
+                width: auto;
+            }
+            
+            #characterSheet {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            
+            @media (max-width: 900px) {
+                .sheet-header {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                .sheet-header h2 {
+                    margin: 0;
+                }
+                .sheet-header-buttons {
+                    width: 100%;
+                }
+                .sheet-header-buttons button {
+                    width: 100%;
+                }
+            }
+            
             @media (max-width: 600px) {
                 .container {
                     padding: 20px;
@@ -1157,44 +1220,73 @@ def index():
                 h1 {
                     font-size: 1.5em;
                 }
+                .sheet-header {
+                    padding: 10px;
+                }
+                .sheet-header-buttons {
+                    width: 100%;
+                }
+                .sheet-header-buttons button {
+                    padding: 6px 12px;
+                    font-size: 0.8em;
+                }
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <h1>FGU Character Sheet Generator</h1>
-            <p class="subtitle">Convert Fantasy Grounds Unity XML to HTML</p>
-            
-            <div class="error" id="error"></div>
-            
-            <form id="uploadForm" enctype="multipart/form-data">
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📁</div>
-                    <p><strong>Click to upload or drag & drop</strong></p>
-                    <p style="font-size: 0.9em; color: #666; margin-top: 5px;">XML character file (max 16MB)</p>
-                    <input type="file" id="fileInput" name="file" accept=".xml" required>
+        <div class="upload-section" id="uploadSection">
+            <div class="container">
+                <h1>FGU Character Sheet Generator</h1>
+                <p class="subtitle">Convert Fantasy Grounds Unity XML to HTML</p>
+                
+                <div class="error" id="error"></div>
+                
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📁</div>
+                        <p><strong>Click to upload or drag & drop</strong></p>
+                        <p style="font-size: 0.9em; color: #666; margin-top: 5px;">XML character file (max 16MB)</p>
+                        <input type="file" id="fileInput" name="file" accept=".xml" required>
+                    </div>
+                    <div id="fileName"></div>
+                    <button type="submit">Generate Character Sheet</button>
+                </form>
+                
+                <div class="info">
+                    <h3>How to use:</h3>
+                    <ul>
+                        <li>Export your character from Fantasy Grounds Unity as XML</li>
+                        <li>Upload the XML file here</li>
+                        <li>Get a beautiful HTML character sheet</li>
+                        <li>Print or save as PDF</li>
+                    </ul>
                 </div>
-                <div id="fileName"></div>
-                <button type="submit">Generate Character Sheet</button>
-            </form>
-            
-            <div class="info">
-                <h3>How to use:</h3>
-                <ul>
-                    <li>Export your character from Fantasy Grounds Unity as XML</li>
-                    <li>Upload the XML file here</li>
-                    <li>Get a beautiful HTML character sheet</li>
-                    <li>Print or save as PDF</li>
-                </ul>
             </div>
         </div>
         
+        <div class="sheet-section" id="sheetSection">
+            <div class="sheet-header">
+                <h2>Character Sheet</h2>
+                <div class="sheet-header-buttons">
+                    <button onclick="downloadCharacterSheet()">📥 Download HTML</button>
+                    <button onclick="uploadNewCharacter()" style="background: #666;">⬅ Upload New</button>
+                </div>
+            </div>
+            <div id="characterSheet"></div>
+        </div>
+        
         <script>
+            let currentHTML = '';
+            let currentFilename = '';
+            
             const uploadArea = document.getElementById('uploadArea');
             const fileInput = document.getElementById('fileInput');
             const fileName = document.getElementById('fileName');
             const form = document.getElementById('uploadForm');
             const errorDiv = document.getElementById('error');
+            const uploadSection = document.getElementById('uploadSection');
+            const sheetSection = document.getElementById('sheetSection');
+            const characterSheetDiv = document.getElementById('characterSheet');
             
             uploadArea.addEventListener('click', () => fileInput.click());
             
@@ -1242,20 +1334,25 @@ def index():
                         body: formData
                     });
                     
-                    if (!response.ok) {
-                        const error = await response.json();
-                        throw new Error(error.error || 'Unknown error');
+                    const data = await response.json();
+                    
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.error || 'Unknown error');
                     }
                     
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'character_sheet.html';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    a.remove();
+                    // Store the HTML and filename
+                    currentHTML = data.html;
+                    currentFilename = data.filename;
+                    
+                    // Display the character sheet
+                    characterSheetDiv.innerHTML = currentHTML;
+                    
+                    // Hide upload section and show sheet section
+                    uploadSection.classList.add('hidden');
+                    sheetSection.classList.add('active');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
                 } catch (error) {
                     errorDiv.textContent = 'Error: ' + error.message;
                     errorDiv.style.display = 'block';
@@ -1264,6 +1361,38 @@ def index():
                     button.textContent = 'Generate Character Sheet';
                 }
             });
+            
+            function downloadCharacterSheet() {
+                if (!currentHTML) return;
+                
+                const blob = new Blob([currentHTML], { type: 'text/html' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = currentFilename || 'character_sheet.html';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            }
+            
+            function uploadNewCharacter() {
+                // Reset form
+                form.reset();
+                fileInput.value = '';
+                fileName.textContent = '';
+                errorDiv.style.display = 'none';
+                
+                // Show upload section and hide sheet section
+                uploadSection.classList.remove('hidden');
+                sheetSection.classList.remove('active');
+                characterSheetDiv.innerHTML = '';
+                currentHTML = '';
+                currentFilename = '';
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
         </script>
     </body>
     </html>
@@ -1272,7 +1401,7 @@ def index():
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    """Generate character sheet from uploaded XML."""
+    """Generate character sheet from uploaded XML and return as JSON."""
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
     
@@ -1307,13 +1436,12 @@ def generate():
         except:
             pass
         
-        # Return HTML as downloadable file
-        return send_file(
-            BytesIO(html.encode('utf-8')),
-            mimetype='text/html',
-            as_attachment=True,
-            download_name=filename
-        )
+        # Return HTML content to display in browser
+        return jsonify({
+            'html': html,
+            'filename': filename,
+            'success': True
+        })
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
